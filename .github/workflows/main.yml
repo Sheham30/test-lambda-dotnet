@@ -17,19 +17,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 2: Set up .NET SDK
+      # Step 2: Set up .NET
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0'  # Adjust if needed
 
-      # Step 3: Install AWS CLI v2
-      - name: Install AWS CLI v2
+      # Step 3: Install AWS CLI using pip
+      - name: Install AWS CLI
         run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-          aws --version  # Verify the installation
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install awscli --upgrade --user
 
       # Step 4: Set up AWS credentials
       - name: Set up AWS credentials
