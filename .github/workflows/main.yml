@@ -17,16 +17,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 2: Set up .NET
+      # Step 2: Set up .NET SDK
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0'  # Adjust if needed
 
-      # Step 3: Install AWS CLI
-      - name: Install AWS CLI
+      # Step 3: Install AWS CLI v2
+      - name: Install AWS CLI v2
         run: |
-          sudo apt-get install awscli
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          aws --version  # Verify the installation
 
       # Step 4: Set up AWS credentials
       - name: Set up AWS credentials
@@ -55,4 +58,3 @@ jobs:
           aws lambda update-function-code \
             --function-name your-lambda-function-name \
             --zip-file fileb://VendorInvoice.zip
-
