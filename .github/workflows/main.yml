@@ -1,0 +1,58 @@
+name: Deploy .NET Lambda to AWS
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to your default branch name
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up .NET
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'  # Adjust if needed
+
+      # Step 3: Install AWS CLI
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get install awscli
+
+      # Step 4: Set up AWS credentials
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'  # Adjust this to your AWS region
+
+      # Step 5: Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Step 6: Build the project
+      - name: Build project
+        run: dotnet build --configuration Release
+
+      # Step 7: Package the Lambda function
+      - name: Package Lambda function
+        run: |
+          dotnet-lambda package --configuration Release --framework net8.0 --output-package ./VendorInvoice.zip
+
+      # Step 8: Upload the zip file to AWS Lambda
+      - name: Deploy to AWS Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name your-lambda-function-name \
+            --zip-file fileb://VendorInvoice.zip
+
