@@ -65,5 +65,5 @@ jobs:
       - name: Deploy to AWS Lambda
         run: |
           aws lambda update-function-code \
-            --function-name your-lambda-function-name \
+            --function-name nesma-test-lambda \
             --zip-file fileb://src/VendorInvoice/VendorInvoice.zip
