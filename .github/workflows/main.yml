@@ -55,7 +55,7 @@ jobs:
       - name: dotnet lambda
         run: |
           cd src/VendorInvoice
-          dotnet new install Amazon.Lambda.Templates
+          dotnet new install -g Amazon.Lambda.Templates
 
       # Step 8: Package the Lambda function
       - name: Package Lambda function
