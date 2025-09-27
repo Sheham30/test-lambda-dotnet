@@ -41,8 +41,10 @@ jobs:
 
       # Step 5: Restore dependencies
       - name: Restore dependencies
-        run: dotnet restore
-
+        run: |
+          cd src/VendorInvoice
+          dotnet restore
+          
       # Step 6: Build the project
       - name: Build project
         run: dotnet build --configuration Release
