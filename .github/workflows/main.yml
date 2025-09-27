@@ -47,16 +47,19 @@ jobs:
           
       # Step 6: Build the project
       - name: Build project
-        run: dotnet build --configuration Release
+        run: |
+          cd src/VendorInvoice
+          dotnet build --configuration Release
 
       # Step 7: Package the Lambda function
       - name: Package Lambda function
         run: |
+          cd src/VendorInvoice
           dotnet-lambda package --configuration Release --framework net8.0 --output-package ./VendorInvoice.zip
 
       # Step 8: Upload the zip file to AWS Lambda
       - name: Deploy to AWS Lambda
         run: |
           aws lambda update-function-code \
-            --function-name your-lambda-function-name \
-            --zip-file fileb://VendorInvoice.zip
+            --function-name nesma-test-lambda \
+            --zip-file fileb://src/VendorInvoice/VendorInvoice.zip
